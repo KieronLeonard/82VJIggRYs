@@ -1,0 +1,32 @@
+<mat-toolbar>
+  <img src="/Ycombinator.svg" class="logo" />
+  <span>Hacker News</span>
+  <mat-button-toggle-group name="category" aria-label="Category" value="top" (change)="loadStoryIds($event.value)" class="category-toggle">
+    <mat-button-toggle value="top">Top</mat-button-toggle>
+    <mat-button-toggle value="new">New</mat-button-toggle>
+    <mat-button-toggle value="best">Best</mat-button-toggle>
+    <mat-button-toggle value="ask">Ask</mat-button-toggle>
+    <mat-button-toggle value="show">Show</mat-button-toggle>
+    <mat-button-toggle value="job">Jobs</mat-button-toggle>
+  </mat-button-toggle-group>
+</mat-toolbar>
+
+<div *ngIf="showTopButton">
+  <button mat-fab extended aria-label="Arrow pointing upwards" (click)="scrollToTop()" class="go-to-top-button">
+    <mat-icon>arrow_upward</mat-icon>
+    Return to Top
+  </button>
+</div>
+
+<mat-nav-list class = "item-list">
+  <mat-list-item *ngFor="let item of allItems" (click)="goToLink(item.url)">
+    <span matListItemTitle>{{ item.title }}</span>
+    <span matListItemLine>By {{ item.by }}</span>
+    <span class="story-metadata">Score: {{ item.score }} | Submitted {{getTimeFromNow(item.time)}}</span>
+  </mat-list-item>
+</mat-nav-list>
+
+<!-- Invisible Element to Trigger Loading More -->
+<div #loadMoreTrigger class="loading-indicator">
+  <mat-spinner *ngIf="allItems.length < totalStories"></mat-spinner>
+</div>
